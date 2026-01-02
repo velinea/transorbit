@@ -1,0 +1,14 @@
+services:
+  transorbit:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: transorbit
+    environment:
+      - PORT=7030
+      - DATA_DIR=/data
+    ports:
+      - '7030:7030'
+    volumes:
+      - ./data:/data
+    restart: unless-stopped

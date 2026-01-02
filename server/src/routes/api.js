@@ -4,7 +4,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import Busboy from 'busboy';
 import { parseSrt, writeSrt } from '../subtitles/srt.js';
-import { suggestVariants } from '../engines/mock.js';
+import { createEngine } from '../engines/engineManager.js';
 
 export function makeApiRouter({ repo, dataDir }) {
   const r = express.Router();
@@ -94,7 +94,19 @@ export function makeApiRouter({ repo, dataDir }) {
       if (!seg) return res.status(404).json({ error: 'Segment not found' });
 
       const n = Number(req.body.n ?? 3);
-      const variants = await suggestVariants({ source_text: seg.source_text, n });
+      const engine = createEngine({
+        type: process.env.TRANSLATION_ENGINE || 'mock',
+        apiKey: process.env.OPENAI_API_KEY,
+        model: process.env.OPENAI_MODEL || 'gpt-4.1-mini',
+      });
+
+      const variants = await engine.suggestVariants({
+        source_text: seg.source_text,
+        sourceLang: repo.getProject(project_id).source_lang,
+        targetLang: repo.getProject(project_id).target_lang,
+        n,
+        style: req.body.style || 'neutral',
+      });
       res.json({ variants });
     }
   );

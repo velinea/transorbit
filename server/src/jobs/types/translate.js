@@ -1,8 +1,14 @@
-import { translateBatch } from '../../engines/mock.js';
+import { createEngine } from '../../engines/engineManager.js';
 
 export async function runTranslateJob({ repo, job, project }) {
   repo.appendJobLog(job.id, 'Starting translate job…');
   repo.setJobStatus(job.id, 'running');
+
+  const engine = createEngine({
+    type: process.env.TRANSLATION_ENGINE || 'mock',
+    apiKey: process.env.OPENAI_API_KEY,
+    model: process.env.OPENAI_MODEL || 'gpt-4.1-mini',
+  });
 
   const segs = repo.listSegments(project.id);
   const total = segs.length || 1;
@@ -15,7 +21,7 @@ export async function runTranslateJob({ repo, job, project }) {
       source_text: s.source_text,
     }));
 
-    const results = await translateBatch({
+    const results = await engine.translateBatch({
       segments: chunk,
       sourceLang: project.source_lang,
       targetLang: project.target_lang,

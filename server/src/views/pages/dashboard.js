@@ -1,4 +1,14 @@
-export function dashboardPage({ projects }) {
+export function dashboardPage({ projects, usage }) {
+  const usageCard = `
+<div class="card">
+  <h2>Usage this month</h2>
+  <div class="small muted">
+    OpenAI: $${usage.openai_usd.toFixed(2)} / $10.00<br>
+    DeepL: ${usage.deepl_chars.toLocaleString()} / 500,000 chars
+  </div>
+</div>
+`;
+
   const rows = projects
     .map(
       p => `<tr>
@@ -13,6 +23,8 @@ export function dashboardPage({ projects }) {
   return `
 <section class="panel">
   <h1>Projects</h1>
+
+  ${usageCard}
 
   <form class="formrow" method="post" action="/api/projects">
     <input name="name" placeholder="New project name" required />

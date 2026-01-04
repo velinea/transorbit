@@ -2,6 +2,7 @@ export function makeRepo(db) {
   const now = () => new Date().toISOString();
 
   return {
+    db,
     // Projects
     createProject({ name, source_lang = 'en', target_lang = 'fi' }) {
       const stmt = db.prepare(
@@ -60,12 +61,18 @@ export function makeRepo(db) {
       return db.prepare(`SELECT * FROM segments WHERE id=?`).get(segId);
     },
 
-    setSegmentDraft({ project_id, idx, draft_text, confidence = null }) {
-      db.prepare(
-        `UPDATE segments
-         SET draft_text=?, confidence=COALESCE(?, confidence)
-         WHERE project_id=? AND idx=?`
-      ).run(draft_text, confidence, project_id, idx);
+    setSegmentDraftById({ segId, draft_text, confidence }) {
+      const info = db
+        .prepare(
+          `UPDATE segments
+        SET draft_text=?, confidence=COALESCE(?, confidence)
+        WHERE id=?`
+        )
+        .run(draft_text, confidence, segId);
+
+      if (info.changes === 0) {
+        console.error('DEBUG: update by id failed', segId);
+      }
     },
 
     // Jobs

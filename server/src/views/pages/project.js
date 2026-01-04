@@ -35,7 +35,7 @@ export function projectPage({ project, jobs }) {
         <input type="hidden" name="type" value="translate" />
         <button type="submit">Translate (draft)</button>
       </form>
-      <p class="muted small">Uses mock engine for now.</p>
+      <p class="muted small"></p>
     </div>
   </div>
 

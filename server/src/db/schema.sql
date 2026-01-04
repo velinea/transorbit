@@ -46,3 +46,12 @@ CREATE TABLE IF NOT EXISTS jobs (
   updated_at TEXT NOT NULL DEFAULT (datetime('now')),
   FOREIGN KEY(project_id) REFERENCES projects(id) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS usage_monthly (
+  month TEXT NOT NULL,
+  provider TEXT NOT NULL, -- openai | deepl
+  amount REAL NOT NULL,   -- USD for openai, chars for deepl
+  updated_at TEXT NOT NULL,
+  PRIMARY KEY (month, provider)
+);
+

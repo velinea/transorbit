@@ -251,3 +251,32 @@ pre {
 .sugg button {
   padding: 6px 10px;
 }
+
+/* Confidence colors */
+.seg[data-confidence]:not([data-confidence='']) {
+  border-left: 4px solid transparent;
+}
+
+.seg[data-confidence=''] {
+  border-left: 4px solid #555;
+}
+
+.seg[data-confidence] {
+  --conf-color: #444;
+}
+
+.seg[data-confidence][data-confidence^='0.'] {
+  --conf-color: #5b4a1d; /* yellow-ish */
+}
+
+.seg[data-confidence][data-confidence^='0.0'],
+.seg[data-confidence][data-confidence^='0.1'],
+.seg[data-confidence][data-confidence^='0.2'],
+.seg[data-confidence][data-confidence^='0.3'],
+.seg[data-confidence][data-confidence^='0.4'] {
+  --conf-color: #5c2a2a; /* red-ish */
+}
+
+.seg {
+  border-left-color: var(--conf-color);
+}

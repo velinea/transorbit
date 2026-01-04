@@ -5,8 +5,10 @@ export function editorPage({ project, segments }) {
       const fin = s.final_text ?? '';
       const conf = (s.confidence ?? '').toString();
       return `
-<div class="seg" data-segid="${s.id}">
-  <div class="meta">
+  <div class="seg"
+     data-segid="${s.id}"
+     data-confidence="${s.confidence ?? ''}">
+    <div class="meta">
     <div class="idx">#${s.idx}</div>
     <div class="time">${ms(s.start_ms)} → ${ms(s.end_ms)}</div>
     <div class="conf">${conf ? `conf: ${conf}` : ''}</div>
@@ -42,6 +44,12 @@ export function editorPage({ project, segments }) {
   <div class="toolbar">
     <a class="btn" href="/p/${project.id}">← Back</a>
     <a class="btn" href="/api/projects/${project.id}/export.srt">Export SRT</a>
+  </div>
+  <div class="card" style="margin-bottom:12px;">
+    <label style="display:block;">
+      <input type="checkbox" id="filter-low-conf" />
+      Show only low-confidence lines (&lt; 0.6)
+    </label>
   </div>
 
   <div id="segments">

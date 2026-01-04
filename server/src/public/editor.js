@@ -1,3 +1,5 @@
+const CONF_THRESHOLD = 0.6;
+
 async function api(url, opts = {}) {
   const res = await fetch(url, {
     headers: { 'Content-Type': 'application/json' },
@@ -64,6 +66,34 @@ document.addEventListener('click', async e => {
         setTimeout(() => (btn.textContent = 'Apply'), 700);
       });
     });
+  }
+});
+
+function applyConfidenceFilter() {
+  const onlyLow = document.getElementById('filter-low-conf')?.checked;
+  const segs = document.querySelectorAll('.seg');
+
+  segs.forEach(seg => {
+    const confAttr = seg.getAttribute('data-confidence');
+    const conf = confAttr === '' ? null : Number(confAttr);
+
+    if (!onlyLow) {
+      seg.style.display = '';
+      return;
+    }
+
+    // Hide if confidence exists and is >= threshold
+    if (conf !== null && conf >= CONF_THRESHOLD) {
+      seg.style.opacity = '0.35';
+    } else {
+      seg.style.opacity = '';
+    }
+  });
+}
+
+document.addEventListener('change', e => {
+  if (e.target?.id === 'filter-low-conf') {
+    applyConfidenceFilter();
   }
 });
 

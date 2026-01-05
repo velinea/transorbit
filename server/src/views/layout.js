@@ -4,7 +4,6 @@ export function layout({ title, body }) {
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta http-equiv="refresh" content="10">
   <title>${escapeHtml(title)}</title>
   <link rel="stylesheet" href="/public/app.css" />
 </head>

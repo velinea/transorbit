@@ -31,10 +31,16 @@ export function projectPage({ project, jobs }) {
 
     <div class="card">
       <h2>Run</h2>
-      <form method="post" action="/api/projects/${project.id}/jobs">
-        <input type="hidden" name="type" value="translate" />
-        <button type="submit">Translate (draft)</button>
-      </form>
+      <div class="jobForms">
+        <form method="post" action="/api/projects/${project.id}/jobs">
+          <input type="hidden" name="type" value="translate" />
+          <button type="submit">Translate (draft)</button>
+        </form>
+        <form method="post" action="/api/projects/${project.id}/jobs">
+          <input type="hidden" name="type" value="consistency" />
+          <button type="submit">Consistency pass</button>
+        </form>
+      </div>
       <p class="muted small"></p>
     </div>
   </div>

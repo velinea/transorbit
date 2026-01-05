@@ -16,7 +16,7 @@ export class OpenAIEngine {
     apiKey,
     model = DEFAULT_MODEL,
     maxRetries = 3,
-    timeoutMs = 60_000,
+    timeoutMs = 180_000,
     maxBatchChars = 6000,
     maxTokens = 4096,
   }) {
@@ -101,6 +101,73 @@ Return JSON in the following format ONLY:
     }));
   }
 
+  /* Consistency pass */
+  async consistencyPass({ items, sourceLang, targetLang }) {
+    const prompt = `
+  You are reviewing translated subtitles.
+
+  Goal:
+  - Improve consistency only.
+  - Do NOT retranslate from scratch.
+  - Do NOT change meaning.
+  - Keep tone and style consistent across all lines.
+
+  Fix:
+  - names translated inconsistently
+  - repeated phrases translated differently
+  - honorifics / formality drift
+  - pronouns or terms used inconsistently
+
+  STRUCTURE RULES (MANDATORY):
+
+  - Each subtitle line is independent.
+  - Do NOT merge lines.
+  - Do NOT split lines.
+  - Do NOT remove lines.
+  - Do NOT add new lines.
+  - Return exactly one corrected text per given ID.
+
+  Finnish language note (very important):
+  First, determine which Finnish address form ("sinä" or "te") is appropriate
+  for this movie overall, based on the relationships between speakers.
+
+  Then, rewrite subtitle lines ONLY if needed to enforce that choice consistently.
+  Do not change meaning or tone otherwise.
+
+  Source language: ${sourceLang}
+  Target language: ${targetLang}
+
+  Return JSON ONLY in this format:
+  {
+    "lines": [
+      { "id": 123, "text": "corrected subtitle line" }
+    ]
+  }
+
+  Lines:
+  ${items.map(i => `(${i.id}) SOURCE: ${i.source}\nDRAFT: ${i.draft}`).join('\n\n')}
+  `.trim();
+    if (prompt.length > 12000) {
+      throw new Error('Consistency prompt too large; chunking required');
+    }
+
+    const resp = await this._call(prompt, { temperature: 0.2 });
+    const json = safeJson(resp);
+
+    const map = new Map();
+    for (const l of json.lines) {
+      if (
+        typeof l !== 'object' ||
+        typeof l.id !== 'number' ||
+        typeof l.text !== 'string'
+      ) {
+        continue;
+      }
+      map.set(l.id, l.text);
+    }
+    return map;
+  }
+
   /* ------------------------------------------------------- */
   /* Low-level OpenAI call                                   */
   /* ------------------------------------------------------- */
@@ -114,6 +181,9 @@ Return JSON in the following format ONLY:
       try {
         const ctrl = new AbortController();
         const to = setTimeout(() => ctrl.abort(), this.timeoutMs);
+        console.log(
+          `[OpenAI] calling model=${this.model}, prompt chars=${prompt.length}`
+        );
 
         const res = await fetch(OPENAI_URL, {
           method: 'POST',
@@ -147,6 +217,7 @@ Return JSON in the following format ONLY:
         const content = json.choices?.[0]?.message?.content;
         if (!content) throw new Error('Empty OpenAI response');
         return content;
+        console.log('[OpenAI] response received');
       } catch (e) {
         lastErr = e;
         await sleep(500 * attempt);

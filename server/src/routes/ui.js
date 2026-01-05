@@ -4,6 +4,7 @@ import { dashboardPage } from '../views/pages/dashboard.js';
 import { projectPage } from '../views/pages/project.js';
 import { editorPage } from '../views/pages/editor.js';
 import { makeUsageRepo } from '../db/usageRepo.js';
+import { logsPage } from '../views/pages/logs.js';
 
 export function makeUiRouter({ repo }) {
   const usageRepo = makeUsageRepo(repo.db);
@@ -65,6 +66,36 @@ export function makeUiRouter({ repo }) {
       layout({
         title: `Editor ${project.name}`,
         body: editorPage({ project, segments }),
+      })
+    );
+  });
+
+  r.get('/logs', (req, res) => {
+    // Show latest jobs across all projects
+    const jobs = repo.db
+      .prepare(
+        `
+    SELECT
+      j.id,
+      j.project_id,
+      p.name AS project_name,
+      j.type,
+      j.status,
+      j.progress,
+      j.log_tail,
+      j.updated_at
+    FROM jobs j
+    LEFT JOIN projects p ON p.id = j.project_id
+    ORDER BY j.updated_at DESC
+    LIMIT 20
+  `
+      )
+      .all();
+
+    res.send(
+      layout({
+        title: 'Logs',
+        body: logsPage({ jobs }),
       })
     );
   });

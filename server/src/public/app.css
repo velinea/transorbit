@@ -251,6 +251,11 @@ pre {
 .sugg button {
   padding: 6px 10px;
 }
+.jobForms {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+}
 
 /* Confidence colors */
 .seg[data-confidence]:not([data-confidence='']) {

@@ -12,6 +12,7 @@ export function layout({ title, body }) {
     <div class="brand"><a href="/">TransOrbit</a></div>
     <nav class="nav">
       <a href="/">Projects</a>
+      <a href="/logs">Logs</a>
       <a href="/about">About</a>
     </nav>
   </header>

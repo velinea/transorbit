@@ -9,8 +9,10 @@ export function layout({ title, body }) {
 </head>
 <body>
   <header class="topbar">
-    <div class="brand"><img src="/public/logo.png" width="64" height="64" alt="TransOrbit Logo" />
-      <a href="/">TransOrbit</a></div>
+    <div class="brand"><a href="/">
+      <img src="/public/logo.png" width="48" height="48" alt="TransOrbit Logo" />
+      TransOrbit</a>
+    </div>
     <nav class="nav">
       <a href="/">Projects</a>
       <a href="/logs">Logs</a>

@@ -127,12 +127,21 @@ Return JSON in the following format ONLY:
   - Do NOT add new lines.
   - Return exactly one corrected text per given ID.
 
-  Finnish language note (very important):
-  First, determine which Finnish address form ("sinä" or "te") is appropriate
-  for this movie overall, based on the relationships between speakers.
+  FINNISH ADDRESS REGISTER (CRITICAL):
 
-  Then, rewrite subtitle lines ONLY if needed to enforce that choice consistently.
-  Do not change meaning or tone otherwise.
+  Finnish has two ways to translate "you":
+  - Informal: "sinä" (and colloquial forms like "sä")
+  - Formal: "te"
+
+  Rules:
+  - Choose ONE address register for the entire movie.
+  - Do NOT mix "sinä/sä" and "te".
+  - If the relationship between speakers is unclear, default to informal "sinä".
+  - Once the register is chosen, enforce it consistently across ALL lines.
+  - Do NOT change sentence structure, timing, or merge lines.
+
+  If any subtitle line violates the chosen address register,
+  rewrite ONLY that line to match the chosen register.
 
   Source language: ${sourceLang}
   Target language: ${targetLang}
@@ -153,6 +162,10 @@ Return JSON in the following format ONLY:
 
     const resp = await this._call(prompt, { temperature: 0.2 });
     const json = safeJson(resp);
+
+    if (!json || !Array.isArray(json.lines)) {
+      return new Map();
+    }
 
     const map = new Map();
     for (const l of json.lines) {

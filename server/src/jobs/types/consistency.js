@@ -2,11 +2,11 @@ export async function runConsistencyJob({ repo, job, project, engine }) {
   repo.appendJobLog(job.id, 'Starting consistency pass…');
   repo.setJobStatus(job.id, 'running');
 
-  const segments = repo.listSegments(project.id);
+  const allSegments = repo.listSegments(project.id);
 
-  // Only segments that have draft text
-  const items = segments
-    .filter(s => s.draft_text)
+  // Only segments that actually have draft text
+  const items = allSegments
+    .filter(s => typeof s.draft_text === 'string' && s.draft_text.trim() !== '')
     .map(s => ({
       id: s.id,
       source: s.source_text,
@@ -14,52 +14,80 @@ export async function runConsistencyJob({ repo, job, project, engine }) {
     }));
 
   if (items.length === 0) {
-    repo.appendJobLog(job.id, 'No draft text found, nothing to do.');
+    repo.appendJobLog(job.id, 'No draft text found; nothing to do.');
+    repo.setJobProgress(job.id, 100);
     repo.setJobStatus(job.id, 'done');
     return;
   }
 
-  const CHUNK = 100;
+  // Chunking parameters — conservative and safe
+  const CHUNK_SIZE = 80;
   const OVERLAP = 15;
 
-  for (let i = 0; i < items.length; i += CHUNK - OVERLAP) {
-    const slice = items.slice(i, i + CHUNK);
+  let updatedCount = 0;
+  let processed = 0;
 
-    let map;
+  for (let i = 0; i < items.length; i += CHUNK_SIZE - OVERLAP) {
+    const slice = items.slice(i, i + CHUNK_SIZE);
+
+    let resultMap;
     try {
-      map = await engine.consistencyPass({
+      resultMap = await engine.consistencyPass({
         items: slice,
         sourceLang: project.source_lang,
         targetLang: project.target_lang,
       });
-    } catch (e) {
-      repo.appendJobLog(job.id, `WARN: consistency chunk failed at ${i}: ${e.message}`);
+    } catch (err) {
+      repo.appendJobLog(
+        job.id,
+        `WARN: consistency chunk failed at index ${i}: ${err.message}`
+      );
+      processed += slice.length;
       continue;
     }
 
-    if (map.size > items.length) {
+    if (!(resultMap instanceof Map)) {
       repo.appendJobLog(
         job.id,
-        'WARN: consistency output has more lines than input, ignoring extras'
+        `WARN: consistency chunk at index ${i} returned no usable data`
       );
+      processed += slice.length;
+      continue;
     }
 
     for (const s of slice) {
-      const fixed = map.get(s.id);
-      if (fixed && fixed !== s.draft) {
+      const fixed = resultMap.get(s.id);
+
+      // HARD GUARDS — structure safety
+      if (typeof fixed !== 'string' || fixed.trim() === '' || fixed === s.draft) {
+        continue;
+      }
+
+      try {
         repo.updateSegmentFinal({
-          project_id: project.id,
           segId: s.id,
           final_text: fixed,
         });
+        updatedCount++;
+      } catch (e) {
+        repo.appendJobLog(
+          job.id,
+          `WARN: failed to update segment ${s.id}: ${e.message}`
+        );
       }
     }
 
-    const progress = Math.floor((i / items.length) * 100);
+    processed += slice.length;
+
+    const progress = Math.min(99, Math.floor((processed / items.length) * 100));
     repo.setJobProgress(job.id, progress);
-    repo.appendJobLog(job.id, `Processed ${progress}%`);
   }
+
+  repo.appendJobLog(
+    job.id,
+    `Consistency pass completed. Updated ${updatedCount} lines.`
+  );
+
   repo.setJobProgress(job.id, 100);
-  repo.appendJobLog(job.id, 'Consistency pass completed.');
   repo.setJobStatus(job.id, 'done');
 }

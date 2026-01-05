@@ -1,3 +1,2 @@
-data
-docker-compose.yml
-rebuild.sh
+docker/
+node_modules/

@@ -12,7 +12,7 @@ import { startJobRunner } from './jobs/runner.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const PORT = Number(process.env.PORT || 7030);
+const PORT = Number(process.env.PORT || 3000);
 const DATA_DIR = process.env.DATA_DIR || path.join(__dirname, '..', '..', 'data');
 const SCHEMA_PATH = path.join(__dirname, 'db', 'schema.sql');
 

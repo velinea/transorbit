@@ -40,10 +40,12 @@ export function editorPage({ project, segments }) {
 
   return `
 <section class="panel">
-  <h1>Editor: ${escapeHtml(project.name)}</h1>
-  <div class="toolbar">
-    <a class="btn" href="/p/${project.id}">← Back</a>
-    <a class="btn" href="/api/projects/${project.id}/export.srt">Export SRT</a>
+  <div class="editor-toolbar">
+    <div class="toolbar">
+      <a class="btn" href="/p/${project.id}">← Back</a>
+      <a class="btn" href="/api/projects/${project.id}/export.srt">Export SRT</a>
+      <h1>Editor: ${escapeHtml(project.name)}</h1>
+    </div>
   </div>
   <div class="card" style="margin-bottom:12px;">
     <label style="display:block;">

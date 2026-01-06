@@ -179,14 +179,22 @@ th {
 .badge.failed {
   background: var(--bad);
 }
-
+/* Toolbar */
 .toolbar {
   display: flex;
-  gap: 8px;
+  gap: 12px;
   margin-bottom: 12px;
   flex-wrap: wrap;
 }
-
+.editor-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #111; /* must be opaque */
+  padding: 8px 12px;
+  margin: 0 150px 0 150px;
+  border-bottom: 1px solid #333;
+}
 /* Editor */
 .seg {
   border: 1px solid var(--line);

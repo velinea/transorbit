@@ -28,10 +28,22 @@ ${escapeHtml(j.log_tail || '(no log output)')}
     .join('');
 
   return `
-<section class="panel">
-  <h1>Logs</h1>
-  ${rows}
-</section>`;
+    <section class="panel">
+      <h1>Logs</h1>
+      ${rows}
+    </section>;
+
+    <script>
+      const REFRESH_MS = 5000;
+
+      const hasRunningJobs = document.querySelector(
+        '.badge.running'
+      );
+
+      if (hasRunningJobs) {
+        setTimeout(() => location.reload(), REFRESH_MS);
+      }
+    </script>`;
 }
 
 function escapeHtml(s) {

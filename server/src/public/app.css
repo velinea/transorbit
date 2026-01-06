@@ -41,15 +41,10 @@ a:hover {
   position: sticky;
   top: 0;
 }
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-weight: bold;
-}
 .brand a {
   text-decoration: none;
   font-size: 2em;
+  font-weight: bold;
 }
 .nav a {
   margin-left: 12px;

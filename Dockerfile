@@ -6,6 +6,7 @@ LABEL org.opencontainers.image.source="https://github.com/velinea/transorbit"
 RUN apt-get update && apt-get install -y \
     sqlite3 \
     dumb-init \
+    vim \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app

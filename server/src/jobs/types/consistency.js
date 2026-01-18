@@ -62,7 +62,7 @@ export async function runConsistencyJob({ repo, job, project, engine }) {
       if (typeof fixed !== 'string' || fixed.trim() === '' || fixed === s.draft) {
         continue;
       }
-
+      console.log(`Consistency fix for segment ${s.id}: "${s.draft}" => "${fixed}"`);
       try {
         repo.updateSegmentFinal({
           segId: s.id,

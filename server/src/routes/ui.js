@@ -100,5 +100,37 @@ export function makeUiRouter({ repo }) {
     );
   });
 
+  r.get('/p/:id', (req, res) => {
+    const project = repo.getProject(req.params.id);
+    if (!project) {
+      return res.status(404).send('Project not found');
+    }
+
+    const status = repo.getProjectStatus(project.id);
+
+    const jobs = repo.db
+      .prepare(
+        `
+    SELECT id, type, status, progress, updated_at
+    FROM jobs
+    WHERE project_id = ?
+    ORDER BY updated_at DESC
+    LIMIT 5
+  `
+      )
+      .all(project.id);
+
+    res.send(
+      layout({
+        title: project.name,
+        body: projectPage({
+          project,
+          status,
+          jobs,
+        }),
+      })
+    );
+  });
+
   return r;
 }

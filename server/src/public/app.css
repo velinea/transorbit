@@ -21,7 +21,13 @@ body {
   padding: 0;
   background: var(--bg);
   color: var(--text);
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    Arial,
+    sans-serif;
 }
 
 a {
@@ -292,4 +298,24 @@ pre {
 
 .seg {
   border-left-color: var(--conf-color);
+}
+.project-status {
+  border-left: 4px solid #2a6cff;
+}
+
+.job-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 4px;
+}
+.job-log {
+  background: #0b0c10;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px;
+  max-height: 200px;
+  overflow: auto;
+  white-space: pre-wrap;
+  margin-top: 8px;
 }

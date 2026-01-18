@@ -63,7 +63,7 @@ function actionsCard(project, { hasSubtitles, hasDraft }) {
   `
       : !hasDraft
         ? `
-    <a class="btn" href="/p/${project.id}/editor">Open Editor</a>
+    <a class="btn" href="/p/${project.id}/edit">Open Editor</a>
 
     <form method="post" action="/api/projects/${project.id}/jobs" style="display:inline;">
       <input type="hidden" name="type" value="translate">
@@ -71,7 +71,7 @@ function actionsCard(project, { hasSubtitles, hasDraft }) {
     </form>
   `
         : `
-    <a class="btn primary" href="/p/${project.id}/editor">Open Editor</a>
+    <a class="btn primary" href="/p/${project.id}/edit">Open Editor</a>
 
     <form method="post" action="/api/projects/${project.id}/jobs" style="display:inline;">
       <input type="hidden" name="type" value="consistency">

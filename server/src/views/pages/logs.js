@@ -1,10 +1,14 @@
 export function logsPage({ jobs }) {
   if (!jobs.length) {
     return `
-<section class="panel">
-  <h1>Logs</h1>
-  <div class="muted">No jobs yet.</div>
-</section>`;
+    <section class="panel">
+      <h1>Logs</h1>
+      <div class="muted">No jobs yet.</div>
+      <label style="display:block; margin-bottom:10px;">
+        <input type="checkbox" id="auto-refresh">
+        Auto refresh logs (5s)
+      </label>
+    </section>`;
   }
 
   const rows = jobs
@@ -35,24 +39,33 @@ ${escapeHtml(j.log_tail || '(no log output)')}
 
     <script>
       const REFRESH_MS = 5000;
-      const SCROLL_KEY = "logs-scroll-top";
-      const hasRunningJobs = document.querySelector(
-        '.badge.running'
-      );
+      const KEY = "logs-auto-refresh";
 
-      // Restore scroll position on load
-      const saved = sessionStorage.getItem(SCROLL_KEY);
-      if (saved !== null) {
-        window.scrollTo(0, Number(saved));
+      const cb = document.getElementById("auto-refresh");
+      let timer = null;
+
+      // Restore checkbox state
+      cb.checked = sessionStorage.getItem(KEY) === "1";
+
+      function start() {
+        if (timer) return;
+        timer = setInterval(() => location.reload(), REFRESH_MS);
       }
 
-      if (hasRunningJobs) {
-        setInterval(() => {
-          // Save scroll position before reload
-          sessionStorage.setItem(SCROLL_KEY, window.scrollY);
-          location.reload();
-        }, REFRESH_MS);
+      function stop() {
+        if (!timer) return;
+        clearInterval(timer);
+        timer = null;
       }
+
+      cb.addEventListener("change", () => {
+        sessionStorage.setItem(KEY, cb.checked ? "1" : "0");
+        cb.checked ? start() : stop();
+      });
+
+      // Start if enabled
+      if (cb.checked) start();
+
     </script>`;
 }
 

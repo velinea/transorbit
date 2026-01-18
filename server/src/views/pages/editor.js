@@ -48,6 +48,7 @@ export function editorPage({ project, segments }) {
       </form>
       <h1>Editor: ${escapeHtml(project.name)}</h1>
       <a class="btn" href="/api/projects/${project.id}/export.srt">Export SRT</a>
+      <div id="filter-info" class="muted" style="margin-bottom:8px;"></div>
     </div>
   </div>
   <div class="card" style="margin-bottom:12px;">

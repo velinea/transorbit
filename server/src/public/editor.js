@@ -43,8 +43,8 @@ document.addEventListener('click', async e => {
       <div class="sugg">
         <div class="srow">
           <div class="muted small">${v.reason || 'Suggestion'} • score ${
-          v.score ?? ''
-        }</div>
+            v.score ?? ''
+          }</div>
           <button class="apply" data-i="${i}">Apply</button>
         </div>
         <div>${escapeHtml(v.text)}</div>
@@ -70,25 +70,41 @@ document.addEventListener('click', async e => {
 });
 
 function applyConfidenceFilter() {
-  const onlyLow = document.getElementById('filter-low-conf')?.checked;
+  const enabled = document.getElementById('filter-low-conf')?.checked;
   const segs = document.querySelectorAll('.seg');
+
+  let shown = 0;
 
   segs.forEach(seg => {
     const confAttr = seg.getAttribute('data-confidence');
     const conf = confAttr === '' ? null : Number(confAttr);
 
-    if (!onlyLow) {
+    if (!enabled) {
       seg.style.display = '';
       return;
     }
 
-    // Hide if confidence exists and is >= threshold
-    if (conf !== null && conf >= CONF_THRESHOLD) {
-      seg.style.opacity = '0.35';
+    // Show only low-confidence or unknown-confidence lines
+    if (conf === null || conf < CONF_THRESHOLD) {
+      seg.style.display = '';
+      shown++;
     } else {
-      seg.style.opacity = '';
+      seg.style.display = 'none';
     }
   });
+
+  updateFilterInfo(shown);
+}
+
+function updateFilterInfo(count) {
+  const el = document.getElementById('filter-info');
+  if (!el) return;
+
+  if (document.getElementById('filter-low-conf').checked) {
+    el.textContent = `Showing ${count} low-confidence lines`;
+  } else {
+    el.textContent = '';
+  }
 }
 
 document.addEventListener('change', e => {

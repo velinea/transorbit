@@ -4,10 +4,6 @@ export function logsPage({ jobs }) {
     <section class="panel">
       <h1>Logs</h1>
       <div class="muted">No jobs yet.</div>
-      <label style="display:block; margin-bottom:10px;">
-        <input type="checkbox" id="auto-refresh">
-        Auto refresh logs (5s)
-      </label>
     </section>`;
   }
 
@@ -34,8 +30,12 @@ ${escapeHtml(j.log_tail || '(no log output)')}
   return `
     <section class="panel">
       <h1>Logs</h1>
+      <label style="display:block; margin-bottom:10px;">
+        <input type="checkbox" id="auto-refresh">
+        Auto refresh logs (5s)
+      </label>
       ${rows}
-    </section>;
+    </section>
 
     <script>
       const REFRESH_MS = 5000;

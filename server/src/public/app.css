@@ -165,6 +165,9 @@ th {
 .muted {
   color: var(--muted);
 }
+.warn {
+  color: var(--warn);
+}
 .small {
   font-size: 12px;
 }
@@ -187,10 +190,20 @@ th {
 }
 /* Toolbar */
 .toolbar {
-  display: flex;
-  gap: 12px;
+  display: grid;
+  grid-template-columns: 150px auto 150px;
   margin-bottom: 12px;
-  flex-wrap: wrap;
+  align-items: center;
+}
+#translateBtn {
+  grid-column: 1;
+}
+.toolbar h1 {
+  grid-column: 2;
+}
+#exportBtn {
+  grid-column: 3;
+  justify-self: end;
 }
 .editor-toolbar {
   position: sticky;

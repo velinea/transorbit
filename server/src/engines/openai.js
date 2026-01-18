@@ -143,6 +143,17 @@ Return JSON in the following format ONLY:
   If any subtitle line violates the chosen address register,
   rewrite ONLY that line to match the chosen register.
 
+  Avoid literal translation of English honorifics.
+
+  Specifically:
+  - Do NOT translate "sir" as "herra" in normal dialogue.
+  - Phrases like "Yes, sir" should usually be translated simply as "Kyllä".
+  - Use "herra <rank>" ONLY in clear military or hierarchical contexts
+    where the rank is explicit or culturally appropriate
+    (e.g. "Yes, Colonel" → "Kyllä herra eversti").
+
+  Favor natural Finnish subtitle conventions over literal wording.
+
   Source language: ${sourceLang}
   Target language: ${targetLang}
 

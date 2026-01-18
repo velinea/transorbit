@@ -1,3 +1,8 @@
+const status = repo.getProjectStatus(project.id);
+const hasSubtitles = status.total > 0;
+const hasDraft = status.draft > 0;
+const hasFinal = status.final > 0;
+
 export function projectPage({ project, jobs }) {
   const jobsRows = jobs
     .map(
@@ -14,6 +19,50 @@ export function projectPage({ project, jobs }) {
     .join('');
 
   return `
+
+<div class="card project-status">
+  <h3>Status</h3>
+
+  <div>
+    Subtitle:
+    ${hasSubtitles ? `✓ uploaded (${status.total} lines)` : `✗ not uploaded`}
+  </div>
+
+  <div>
+    Draft translation:
+    ${hasDraft ? `✓ ${status.draft} / ${status.total} lines` : `✗ not started`}
+  </div>
+
+  <div>
+    Final text:
+    ${hasFinal ? `✓ ${status.final} / ${status.total} lines` : `✗ not started`}
+  </div>
+
+  <div style="margin-top:10px;">
+    ${
+      !hasSubtitles
+        ? `
+      <em>Upload subtitles to continue.</em>
+    `
+        : !hasDraft
+          ? `
+      <a class="btn" href="/p/${project.id}/editor">Open Editor</a>
+      <form method="post" action="/api/projects/${project.id}/jobs" style="display:inline;">
+        <input type="hidden" name="type" value="translate">
+        <button class="btn primary">Translate (draft)</button>
+      </form>
+    `
+          : `
+      <a class="btn" href="/p/${project.id}/editor">Open Editor</a>
+      <form method="post" action="/api/projects/${project.id}/jobs" style="display:inline;">
+        <input type="hidden" name="type" value="consistency">
+        <button class="btn">Consistency pass</button>
+      </form>
+    `
+    }
+  </div>
+</div>
+
 <section class="panel">
   <h1>Project: ${escapeHtml(project.name)}</h1>
 

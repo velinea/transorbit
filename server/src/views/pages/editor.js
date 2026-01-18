@@ -42,9 +42,12 @@ export function editorPage({ project, segments }) {
 <section class="panel">
   <div class="editor-toolbar">
     <div class="toolbar">
-      <a class="btn" href="/p/${project.id}">← Back</a>
-      <a class="btn" href="/api/projects/${project.id}/export.srt">Export SRT</a>
+      <form method="post" action="/api/projects/${project.id}/jobs">
+        <input type="hidden" name="type" value="translate" />
+        <button type="submit">Translate (draft)</button>
+      </form>
       <h1>Editor: ${escapeHtml(project.name)}</h1>
+      <a class="btn" href="/api/projects/${project.id}/export.srt">Export SRT</a>
     </div>
   </div>
   <div class="card" style="margin-bottom:12px;">

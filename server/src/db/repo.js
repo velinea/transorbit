@@ -132,5 +132,26 @@ export function makeRepo(db) {
         `UPDATE jobs SET status='failed', error=?, updated_at=? WHERE id=?`
       ).run(String(error), now(), id);
     },
+
+    getProjectStatus(projectId) {
+      const row = db
+        .prepare(
+          `
+    SELECT
+      COUNT(*) AS total,
+      SUM(draft_text IS NOT NULL) AS draft_count,
+      SUM(final_text IS NOT NULL) AS final_count
+    FROM segments
+    WHERE project_id = ?
+      `
+        )
+        .get(projectId);
+
+      return {
+        total: row.total,
+        draft: row.draft_count,
+        final: row.final_count,
+      };
+    },
   };
 }

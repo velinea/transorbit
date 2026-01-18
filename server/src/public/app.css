@@ -6,10 +6,10 @@
   --muted: #a3a6b3;
   --line: #2a2e3d;
   --btn: #2b3246;
-  --btn2: #39425c;
+  --btn2: #216968;
   --bad: #5c2a2a;
   --ok: #2a5c3b;
-  --warn: #5b4a1d;
+  --warn: #ad170c;
 }
 
 * {
@@ -66,8 +66,7 @@ a:hover {
   max-width: 1200px;
   margin: 0 auto;
 }
-
-.panel {
+4p .panel {
   background: var(--panel);
   border: 1px solid var(--line);
   border-radius: 10px;
@@ -111,11 +110,12 @@ button,
   background: var(--btn);
   border: 1px solid var(--line);
   color: var(--text);
-  border-radius: 8px;
-  padding: 10px 12px;
+  border-radius: 4px;
+  padding: 6px;
   cursor: pointer;
   text-decoration: none;
   display: inline-block;
+  font-size: small;
 }
 button:hover,
 .btn:hover {
@@ -192,14 +192,15 @@ th {
 .toolbar {
   display: grid;
   grid-template-columns: 150px auto 150px;
-  margin-bottom: 12px;
   align-items: center;
 }
 #translateBtn {
   grid-column: 1;
 }
-.toolbar h1 {
+.toolbar h1,
+#filter-info {
   grid-column: 2;
+  justify-self: center;
 }
 #exportBtn {
   grid-column: 3;

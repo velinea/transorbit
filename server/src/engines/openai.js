@@ -84,6 +84,8 @@ SUBTITLE STRUCTURE RULES (CRITICAL):
 - Preserve speaker markers.
 - A leading "-" indicates a new speaker.
 - If a source line begins with "-", the translated line MUST begin with "-" as the first character.
+- Preserve italic markers (e.g., "<i>...</i>").
+- If the source line contains italic markers, the translated line MUST contain them in the same positions.
 - Never merge or split lines.
 - Never remove leading punctuation used as speaker markers.
 

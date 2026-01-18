@@ -35,13 +35,23 @@ ${escapeHtml(j.log_tail || '(no log output)')}
 
     <script>
       const REFRESH_MS = 5000;
-
+      const SCROLL_KEY = "logs-scroll-top";
       const hasRunningJobs = document.querySelector(
         '.badge.running'
       );
 
+      // Restore scroll position on load
+      const saved = sessionStorage.getItem(SCROLL_KEY);
+      if (saved !== null) {
+        window.scrollTo(0, Number(saved));
+      }
+
       if (hasRunningJobs) {
-        setTimeout(() => location.reload(), REFRESH_MS);
+        setInterval(() => {
+          // Save scroll position before reload
+          sessionStorage.setItem(SCROLL_KEY, window.scrollY);
+          location.reload();
+        }, REFRESH_MS);
       }
     </script>`;
 }

@@ -43,6 +43,10 @@ export async function runTranslateJob({ repo, job, project }) {
         continue;
       }
 
+      // Preserve leading dash if present in source
+      const sourceText = chunk.find(s => s.idx === r.idx)?.source_text || '';
+      r.text = preserveLeadingDash(sourceText, r.text);
+
       repo.setSegmentDraftById({
         segId,
         draft_text: r.text,
@@ -91,4 +95,10 @@ import { makeUsageRepo } from '../../db/usageRepo.js';
 
 function currentMonth() {
   return new Date().toISOString().slice(0, 7); // YYYY-MM
+}
+function preserveLeadingDash(source, translated) {
+  if (source.trimStart().startsWith('-') && !translated.trimStart().startsWith('-')) {
+    return '-' + translated.trimStart();
+  }
+  return translated;
 }

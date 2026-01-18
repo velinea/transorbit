@@ -78,6 +78,15 @@ Translate the subtitle line below into ${targetLang}.
 Return ${n} different alternatives.
 Each alternative must be short, natural, and suitable for subtitles.
 
+SUBTITLE STRUCTURE RULES (CRITICAL):
+
+- Treat each subtitle line independently.
+- Preserve speaker markers.
+- A leading "-" indicates a new speaker.
+- If a source line begins with "-", the translated line MUST begin with "-" as the first character.
+- Never merge or split lines.
+- Never remove leading punctuation used as speaker markers.
+
 Subtitle:
 """${source_text}"""
 

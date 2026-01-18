@@ -47,16 +47,6 @@ export function makeUiRouter({ repo }) {
     );
   });
 
-  r.get('/p/:id', (req, res) => {
-    const id = Number(req.params.id);
-    const project = repo.getProject(id);
-    if (!project) return res.status(404).send('Not found');
-    const jobs = repo.listJobs(id);
-    res.send(
-      layout({ title: `Project ${project.name}`, body: projectPage({ project, jobs }) })
-    );
-  });
-
   r.get('/p/:id/edit', (req, res) => {
     const id = Number(req.params.id);
     const project = repo.getProject(id);

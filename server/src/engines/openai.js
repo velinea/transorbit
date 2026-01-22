@@ -88,7 +88,6 @@ SUBTITLE STRUCTURE RULES (CRITICAL):
 - If a source line begins with "-", the translated line MUST begin with "-" as the first character.
 - Preserve italic markers (e.g., "<i>...</i>").
 - If the source line contains italic markers, the translated line MUST contain them in the same positions.
-- Never merge or split lines.
 - Never remove leading punctuation used as speaker markers.
 
 IMPORTANT CONSTRAINTS:
@@ -107,7 +106,7 @@ DISALLOWED:
 - Do not preserve original sentence structure if it harms readability.
 - Do not translate word-for-word when it increases reading speed.
 - Do not add explanations or expand dialogue.
-- Do not merge or split lines.
+- Do not merge or split subtitle lines.
 
 PRIORITY ORDER (highest to lowest):
 1. Viewer comprehension
@@ -116,6 +115,8 @@ PRIORITY ORDER (highest to lowest):
 4. Fidelity to exact wording
 
 Think like a professional subtitle translator, not a literal translator.
+Assume the viewer is already watching the scene; subtitles should support, not duplicate, the visuals.
+After translating each subtitle, mentally check whether it could be read comfortably in under two seconds. If not, shorten it.
 
 Subtitle:
 """${source_text}"""

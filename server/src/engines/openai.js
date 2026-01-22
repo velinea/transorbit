@@ -107,6 +107,7 @@ DISALLOWED:
 - Do not preserve original sentence structure if it harms readability.
 - Do not translate word-for-word when it increases reading speed.
 - Do not add explanations or expand dialogue.
+- Do not merge or split lines.
 
 PRIORITY ORDER (highest to lowest):
 1. Viewer comprehension

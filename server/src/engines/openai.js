@@ -67,7 +67,9 @@ export class OpenAIEngine {
     style = 'neutral',
   }) {
     const prompt = `
-You are a professional subtitle translator.
+You are translating movie subtitles from English to Finnish.
+
+Your primary goal is viewer comprehension and comfortable reading speed.
 
 Source language: ${sourceLang}
 Target language: ${targetLang}
@@ -88,6 +90,31 @@ SUBTITLE STRUCTURE RULES (CRITICAL):
 - If the source line contains italic markers, the translated line MUST contain them in the same positions.
 - Never merge or split lines.
 - Never remove leading punctuation used as speaker markers.
+
+IMPORTANT CONSTRAINTS:
+- Target reading speed should stay below approximately 23 characters per second.
+- Finnish words and sentence structures are often longer than English; account for this.
+- If a literal translation would be too long or fast to read, you MUST condense it.
+
+ALLOWED AND ENCOURAGED:
+- Paraphrase freely to preserve meaning.
+- Omit filler words, repetitions, or non-essential phrases.
+- Merge or simplify ideas when possible.
+- Prefer natural spoken Finnish over literal accuracy.
+- It is acceptable to leave out words or even short sentences if they are not necessary for understanding what is happening on screen.
+
+DISALLOWED:
+- Do not preserve original sentence structure if it harms readability.
+- Do not translate word-for-word when it increases reading speed.
+- Do not add explanations or expand dialogue.
+
+PRIORITY ORDER (highest to lowest):
+1. Viewer comprehension
+2. Natural Finnish flow
+3. Comfortable reading speed
+4. Fidelity to exact wording
+
+Think like a professional subtitle translator, not a literal translator.
 
 Subtitle:
 """${source_text}"""
@@ -115,7 +142,34 @@ Return JSON in the following format ONLY:
   /* Consistency pass */
   async consistencyPass({ items, sourceLang, targetLang }) {
     const prompt = `
-  You are reviewing translated subtitles.
+  You are translating movie subtitles from English to Finnish.
+
+Your primary goal is viewer comprehension and comfortable reading speed.
+
+IMPORTANT CONSTRAINTS:
+- Target reading speed should stay below approximately 23 characters per second.
+- Finnish words and sentence structures are often longer than English; account for this.
+- If a literal translation would be too long or fast to read, you MUST condense it.
+
+ALLOWED AND ENCOURAGED:
+- Paraphrase freely to preserve meaning.
+- Omit filler words, repetitions, or non-essential phrases.
+- Merge or simplify ideas when possible.
+- Prefer natural spoken Finnish over literal accuracy.
+- It is acceptable to leave out words or even short sentences if they are not necessary for understanding what is happening on screen.
+
+DISALLOWED:
+- Do not preserve original sentence structure if it harms readability.
+- Do not translate word-for-word when it increases reading speed.
+- Do not add explanations or expand dialogue.
+
+PRIORITY ORDER (highest to lowest):
+1. Viewer comprehension
+2. Natural Finnish flow
+3. Comfortable reading speed
+4. Fidelity to exact wording
+
+Think like a professional subtitle translator, not a literal translator.
 
   Goal:
   - Improve consistency only.

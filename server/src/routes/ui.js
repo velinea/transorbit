@@ -42,7 +42,7 @@ export function makeUiRouter({ repo }) {
     res.send(
       layout({
         title: 'About',
-        body: `<section class="panel"><h1>About</h1><p>TransOrbit scaffold (pure HTML/CSS/JS).</p></section>`,
+        body: `<section class="panel"><a href="https://github.com/velinea/fforbit">TransOrbit &copy; 2026</a></section>`,
       })
     );
   });

@@ -198,9 +198,21 @@ Think like a professional subtitle translator, not a literal translator.
 
   Finnish has two ways to translate "you":
   - Informal: "sinä" (and colloquial forms like "sä")
-  - Formal: "te"
+  - Formal or polite: "te"
 
-  Rules:
+  ALWAYS USE "te"
+  - when addressing strangers, superiors, or in formal situations.
+  - in military, official, or workplace contexts.
+  - when the original English uses "sir" or "ma'am" formally.
+  - in polite requests or offers.
+  - when addressing groups of people.
+
+  ALWAYS USE "sinä"
+  - when addressing friends, family, peers, or in casual situations.
+  - in intimate, romantic, or humorous contexts.
+  - when the original English uses first names or informal terms.
+
+  RULES FOR THIS MOVIE:
   - Choose ONE address register for the entire movie.
   - Do NOT mix "sinä/sä" and "te".
   - If the relationship between speakers is unclear, default to informal "sinä".
